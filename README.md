@@ -18,5 +18,6 @@ git clone https://github.com/AAA-Triple-AAA/geek-text.git
 ```text
 DB_URL=[insert JDBC connection string here]
 ```
-**Note:** You will need to retrieve the connection string from your database host (i.e. Supabase, Neon, etc.).
-3. Open the project in your favorite IDE and let Maven sync the dependencies
+**Note:** You will need to retrieve the **JDBC** connection string from your database host (i.e. Supabase, Neon, etc.).
+
+4. Open the project in your favorite IDE and let Maven sync the dependencies
