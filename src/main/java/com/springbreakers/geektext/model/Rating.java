@@ -54,7 +54,7 @@ public class Rating {
         return "Rating{" + "userId=" + userID + ", bookId=" + bookID + ", rating=" + rating + ", datestamp=" + datestamp + '}';
     }
 
-    public static final RowMapper<Rating> ROW_MAPPER = (rs, rowNum) -> {
+    public static final RowMapper<Rating> RATING_MAPPER = (rs, rowNum) -> {
         return new Rating(rs.getInt("user_id"),
                 rs.getInt("book_id"),
                 rs.getInt("rating"),
