@@ -1,16 +1,28 @@
 package com.springbreakers.geektext.controller;
 
+import com.springbreakers.geektext.model.ShoppingCart;
+import com.springbreakers.geektext.service.ShoppingCartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/shopping-cart")
+@RequestMapping("/users")
 public class ShoppingCartController {
 
-    @GetMapping
-    public String getStatus() {
-        return "This is the shopping cart.";
+    private final ShoppingCartService shoppingCartService;
+
+    @Autowired
+    public ShoppingCartController(ShoppingCartService shoppingCartService) {
+        this.shoppingCartService = shoppingCartService;
+    }
+
+    @GetMapping("/shopping-carts")
+    public List<ShoppingCart> getShoppingCarts() {
+        return shoppingCartService.getShoppingCarts();
     }
 
     // TODO: GET request for SUBTOTAL
