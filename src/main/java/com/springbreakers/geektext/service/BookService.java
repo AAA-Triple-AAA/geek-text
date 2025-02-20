@@ -1,7 +1,6 @@
 package com.springbreakers.geektext.service;
-import com.springbreakers.geektext.model.Author;
+
 import com.springbreakers.geektext.model.Book;
-import com.springbreakers.geektext.model.ShoppingCart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -9,20 +8,38 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BookDetailsService {
+public class BookService {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public BookDetailsService(JdbcTemplate jdbcTemplate) {
+    public BookService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Book> getAllBooks() {
-        String sql = "SELECT * FROM book";
+    // MAYA'S METHODS
+    public List<Book> getBooksByGenre(int genreID) {
+        String sql = "SELECT * FROM book WHERE genre_id = ?";
+        return jdbcTemplate.query(sql, Book.BOOK_MAPPER, genreID);
+    }
+
+    public List<Book> getTopSellers() {
+        String sql = "SELECT * FROM book ORDER BY copies_sold DESC LIMIT 10";
         return jdbcTemplate.query(sql, Book.BOOK_MAPPER);
     }
 
     /*
+    OPTIONAL SAMPLE METHOD HEADERS:
+
+    public List<Book> getBooksByRating(int rating) {}
+
+    public void setPublisherDiscount(String publisher) {}
+
+    */
+
+
+    /*
+    JESSICA'S METHODS
+
     public List<Book> getBooksByAuthor(int authorID) {
         String sql = "SELECT * FROM book WHERE author_id = ?";
         return jdbcTemplate.query(sql, Book.BOOK_MAPPER, authorID);
@@ -34,4 +51,9 @@ public class BookDetailsService {
     }
     */
 
+    // GENERAL METHODS
+    public List<Book> getAllBooks() {
+        String sql = "SELECT * FROM book";
+        return jdbcTemplate.query(sql, Book.BOOK_MAPPER);
+    }
 }

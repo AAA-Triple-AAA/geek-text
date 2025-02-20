@@ -2,7 +2,7 @@ package com.springbreakers.geektext.model;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class Profile {
+public class User {
     private int id;
     private String username;
     private String password;
@@ -11,7 +11,7 @@ public class Profile {
     private String email;
     private String address;
 
-    public Profile(int id, String username, String password, String firstName, String lastName, String email, String address) {
+    public User(int id, String username, String password, String firstName, String lastName, String email, String address) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -79,11 +79,11 @@ public class Profile {
 
     @Override
     public String toString() {
-        return "Profile{" + "id=" + id + ", username=" + username + ", first_name=" + firstName + ", last_name=" + lastName + ", email=" + email + ", address=" + address + '}';
+        return "User{" + "id=" + id + ", username=" + username + ", first_name=" + firstName + ", last_name=" + lastName + ", email=" + email + ", address=" + address + '}';
     }
 
-    public static final RowMapper<Profile> Profile_MAPPER = (rs, rowNum) -> {
-        return new Profile(rs.getInt("id"),
+    public static final RowMapper<User> USER_MAPPER = (rs, rowNum) -> {
+        return new User(rs.getInt("id"),
                 rs.getString("username"),
                 rs.getString("password"),
                 rs.getString("first_name"),
@@ -91,5 +91,4 @@ public class Profile {
                 rs.getString("email"),
                 rs.getString("address"));
     };
-
 }

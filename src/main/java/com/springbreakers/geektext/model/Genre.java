@@ -2,15 +2,13 @@ package com.springbreakers.geektext.model;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class Wishlist {
+public class Genre {
     private int id;
     private String name;
-    private int userId;
 
-    public Wishlist(int id, String name, int userId) {
+    public Genre(int id, String name) {
         this.id = id;
         this.name = name;
-        this.userId = userId;
     }
 
     public int getId() {
@@ -29,14 +27,7 @@ public class Wishlist {
         this.name = name;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public static final RowMapper<Wishlist> WISHLIST_MAPPER = (rs, rowNum) ->
-            new Wishlist(rs.getInt("id"), rs.getString("name"), rs.getInt("user_id"));
+    public static final RowMapper<Genre> GENRE_MAPPER = (rs, rowNum) -> {
+        return new Genre(rs.getInt("id"), rs.getString("name"));
+    };
 }

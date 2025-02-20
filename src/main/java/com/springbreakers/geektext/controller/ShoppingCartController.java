@@ -25,11 +25,10 @@ public class ShoppingCartController {
         return shoppingCartService.getShoppingCarts();
     }
 
-    // TODO: GET request for SUBTOTAL
-
-    // TODO: POST request to ADD BOOK to shopping cart
-
-    // TODO: GET request to display LIST OF BOOKS in the shopping cart
-
-    // TODO: DELETE request to REMOVE BOOK from user's shopping cart
+    /*
+    TODO: GET request for SUBTOTAL
+    TODO: POST request to ADD BOOK to shopping cart
+    TODO: GET request to display LIST OF BOOKS in the shopping cart
+    TODO: DELETE request to REMOVE BOOK from user's shopping cart
+     */
 }

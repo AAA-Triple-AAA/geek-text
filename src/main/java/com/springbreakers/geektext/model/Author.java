@@ -64,5 +64,4 @@ public class Author {
                 rs.getString("biography"),
                 rs.getInt("publisher_id"));
     };
-
 }

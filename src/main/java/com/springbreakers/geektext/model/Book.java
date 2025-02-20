@@ -4,17 +4,17 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class Book {
     private int id;
-    private long isbn;
+    private String isbn;
     private String title;
     private String description;
     private int year;
     private double price;
-    private long copies_sold;
+    private int copies_sold;
     private int genre_id;
     private int publisher_id;
     private int author_id;
 
-    public Book(int id, long isbn, String title, String description, int year, double price, long copies_sold, int genre_id, int publisher_id, int author_id) {
+    public Book(int id, String isbn, String title, String description, int year, double price, int copies_sold, int genre_id, int publisher_id, int author_id) {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
@@ -35,11 +35,11 @@ public class Book {
         this.id = id;
     }
 
-    public long getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(long isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -75,11 +75,11 @@ public class Book {
         this.price = price;
     }
 
-    public long getCopies_sold() {
+    public int getCopies_sold() {
         return copies_sold;
     }
 
-    public void setCopies_sold(long copies_sold) {
+    public void setCopies_sold(int copies_sold) {
         this.copies_sold = copies_sold;
     }
 
@@ -109,15 +109,14 @@ public class Book {
 
     public static final RowMapper<Book> BOOK_MAPPER = (rs, rowNum) -> {
         return new Book(rs.getInt("id"),
-                rs.getLong("isbn"),
+                rs.getString("isbn"),
                 rs.getString("title"),
                 rs.getString("description"),
                 rs.getInt("year"),
                 rs.getDouble("price"),
-                rs.getLong("copies_sold"),
+                rs.getInt("copies_sold"),
                 rs.getInt("genre_id"),
                 rs.getInt("publisher_id"),
                 rs.getInt("author_id"));
     };
-
 }
