@@ -23,4 +23,14 @@ public class WishlistManagementController {
     public List<Wishlist> getWishlists() {
         return wishlistService.getWishlists();
     }
+
+    /*
+
+    TO DO
+
+    Add and delete items from wishlist
+
+    Max 3 wishlists per user
+
+     */
 }
