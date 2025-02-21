@@ -27,7 +27,7 @@ public class BookRatingAndCommentingController
     }
 
     /*
-    To-Do:
+    TODO:
     - Create rating for a book by a user on a 5-star scale with a datestamp
     - Create comment for a book by a user with a datestamp
     - Retrieve a list of all comments for a particular book

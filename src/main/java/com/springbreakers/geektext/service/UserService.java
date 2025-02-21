@@ -1,25 +1,24 @@
 package com.springbreakers.geektext.service;
 
-import com.springbreakers.geektext.model.Profile;
+import com.springbreakers.geektext.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.springbreakers.geektext.model.Rating;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProfileService {
+public class UserService {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ProfileService(JdbcTemplate jdbcTemplate) {
+    public UserService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Profile> getProfiles() {
+    public List<User> getUsers() {
         String sql = "SELECT * FROM \"user\"";
-        return jdbcTemplate.query(sql, Profile.Profile_MAPPER);
+        return jdbcTemplate.query(sql, User.USER_MAPPER);
     }
 }
