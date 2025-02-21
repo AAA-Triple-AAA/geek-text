@@ -3,28 +3,28 @@ package com.springbreakers.geektext.model;
 import org.springframework.jdbc.core.RowMapper;
 
 public class WishlistBook {
-    private int wishlistID;
-    private int bookID;
+    private int wishlistId;
+    private int bookId;
 
-    public WishlistBook(int wishlistID, int bookID) {
-        this.wishlistID = wishlistID;
-        this.bookID = bookID;
+    public WishlistBook(int wishlistId, int bookId) {
+        this.wishlistId = wishlistId;
+        this.bookId = bookId;
     }
 
-    public int getWishlistID() {
-        return wishlistID;
+    public int getWishlistId() {
+        return wishlistId;
     }
 
-    public void setWishlistID(int wishlistID) {
-        this.wishlistID = wishlistID;
+    public void setWishlistId(int wishlistId) {
+        this.wishlistId = wishlistId;
     }
 
-    public int getBookID() {
-        return bookID;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public static final RowMapper<WishlistBook> WISHLIST_BOOK_MAPPER = (rs, rowNum) -> {

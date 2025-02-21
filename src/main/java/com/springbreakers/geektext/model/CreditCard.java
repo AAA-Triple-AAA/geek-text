@@ -8,15 +8,15 @@ public class CreditCard {
     private String number;
     private String cvv;
     private String zip;
-    private int userID;
+    private int userId;
 
-    public CreditCard(int id, String cardHolder, String number, String cvv, String zip, int userID) {
+    public CreditCard(int id, String cardHolder, String number, String cvv, String zip, int userId) {
         this.id = id;
         this.cardHolder = cardHolder;
         this.number = number;
         this.cvv = cvv;
         this.zip = zip;
-        this.userID = userID;
+        this.userId = userId;
     }
 
     public int getId() {
@@ -59,12 +59,12 @@ public class CreditCard {
         this.zip = zip;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public static final RowMapper<CreditCard> CREDIT_CARD_MAPPER = (rs, rowNum) -> {

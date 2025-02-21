@@ -17,9 +17,9 @@ public class BookService {
     }
 
     // MAYA'S METHODS
-    public List<Book> getBooksByGenre(int genreID) {
+    public List<Book> getBooksByGenre(int genreId) {
         String sql = "SELECT * FROM book WHERE genre_id = ?";
-        return jdbcTemplate.query(sql, Book.BOOK_MAPPER, genreID);
+        return jdbcTemplate.query(sql, Book.BOOK_MAPPER, genreId);
     }
 
     public List<Book> getTopSellers() {
@@ -40,7 +40,7 @@ public class BookService {
     /*
     JESSICA'S METHODS
 
-    public List<Book> getBooksByAuthor(int authorID) {
+    public List<Book> getBooksByAuthor(int authorId) {
         String sql = "SELECT * FROM book WHERE author_id = ?";
         return jdbcTemplate.query(sql, Book.BOOK_MAPPER, authorID);
     }

@@ -5,32 +5,32 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.Timestamp;
 
 public class Rating {
-    private int userID;
-    private int bookID;
+    private int userId;
+    private int bookId;
     private int rating;
     private Timestamp datestamp;
 
-    public Rating(int userID, int bookID, int rating, Timestamp datestamp) {
-        this.userID = userID;
-        this.bookID = bookID;
+    public Rating(int userId, int bookId, int rating, Timestamp datestamp) {
+        this.userId = userId;
+        this.bookId = bookId;
         this.rating = rating;
         this.datestamp = datestamp;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getBookID() {
-        return bookID;
+    public int getBookId() {
+        return bookId;
     }
 
-    public void setBookID(int bookID) {
-        this.bookID = bookID;
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 
     public int getRating() {
@@ -51,7 +51,7 @@ public class Rating {
 
     @Override
     public String toString() {
-        return "Rating{" + "userId=" + userID + ", bookId=" + bookID + ", rating=" + rating + ", datestamp=" + datestamp + '}';
+        return "Rating{" + "userId=" + userId + ", bookId=" + bookId + ", rating=" + rating + ", datestamp=" + datestamp + '}';
     }
 
     public static final RowMapper<Rating> RATING_MAPPER = (rs, rowNum) -> {

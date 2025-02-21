@@ -5,26 +5,26 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.Timestamp;
 
 public class Comment {
-    private int userID;
+    private int id;
     private String comment;
     private Timestamp timestamp;
     private int userId;
     private int bookId;
 
-    public Comment(int userID, String comment, Timestamp timestamp, int userId, int bookId) {
-        this.userID = userID;
+    public Comment(int id, String comment, Timestamp timestamp, int userId, int bookId) {
+        this.id = id;
         this.comment = comment;
         this.timestamp = timestamp;
         this.userId = userId;
         this.bookId = bookId;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getId() {
+        return id;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getComment() {

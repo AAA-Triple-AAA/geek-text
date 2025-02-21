@@ -23,9 +23,9 @@ public class BookBrowsingAndSortingController {
         return bookService.getAllBooks();
     }
     
-    @GetMapping("/{genreID}")
-    public List<Book> getBooksByGenre(@PathVariable String genreID) {
-        return bookService.getBooksByGenre(Integer.parseInt(genreID));
+    @GetMapping("/{genreId}")
+    public List<Book> getBooksByGenre(@PathVariable String genreId) {
+        return bookService.getBooksByGenre(Integer.parseInt(genreId));
     }
 
     @GetMapping("/top-sellers")
