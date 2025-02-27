@@ -20,4 +20,12 @@ public class WishlistService {
         String sql = "SELECT * FROM wishlist";
         return jdbcTemplate.query(sql, Wishlist.WISHLIST_MAPPER);
     }
+
+    public void createWishlist(int userId, String wishlistName) {
+        String countSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ?";
+        int count = jdbcTemplate.queryForObject(countSql, Integer.class, userId);
+        if (count >= 3) {
+            throw new IllegalStateException("User already has 3 wishlists.");
+        }
+    }
 }
