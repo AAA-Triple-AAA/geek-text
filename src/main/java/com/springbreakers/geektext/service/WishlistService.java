@@ -27,5 +27,25 @@ public class WishlistService {
         if (count >= 3) {
             throw new IllegalStateException("User already has 3 wishlists.");
         }
+
+        String nameSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND name = ?";
+        int nameCount = jdbcTemplate.queryForObject(nameSql, Integer.class, userId, wishlistName);
+        if (nameCount > 0) {
+            throw new IllegalArgumentException("Wishlist name already exists for this user.");
+        }
+
+        String insertSql = "INSERT INTO wishlist (name, user_id) VALUES (?, ?)";
+        jdbcTemplate.update(insertSql, wishlistName, userId);
+    }
+
+    public void addBookToWishlist(int userId, String wishlistName, int bookId) {
+        String checkWishlistSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND name = ?";
+        int wishlistCount = jdbcTemplate.queryForObject(checkWishlistSql, Integer.class, userId, wishlistName);
+        if (wishlistCount == 0) {
+            throw new IllegalArgumentException("Wishlist not found for this user.");
+        }
+
+        String insertBookSql = "INSERT INTO wishlist_books (wishlist_id, book_id) SELECT id, ? FROM wishlist WHERE user_id = ? AND name = ?";
+        jdbcTemplate.update(insertBookSql, bookId, userId, wishlistName);
     }
 }
