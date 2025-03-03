@@ -3,6 +3,7 @@ package com.springbreakers.geektext.controller;
 import com.springbreakers.geektext.service.CommentService;
 import com.springbreakers.geektext.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +28,21 @@ public class BookRatingAndCommentingController
     }
 
     @GetMapping("/books/{bookId}/comments")
-    public List<Comment> getBookComments(@PathVariable int bookId) {
-        return commentService.getBookComments(bookId);
+    public ResponseEntity<?> getBookComments(@PathVariable String bookId) {
+        int id = 0;
+        try {
+            id = Integer.parseInt(bookId);
+        } catch (NumberFormatException e) {
+           return ResponseEntity.badRequest().body("ERROR: Invalid format");
+        }
+        List<Comment> comments = commentService.getBookComments(id);
+        return ResponseEntity.ok(comments);
     }
+
     /*
     TODO:
     - Create rating for a book by a user on a 5-star scale with a datestamp
     - Create comment for a book by a user with a datestamp
-    - Retrieve a list of all comments for a particular book
     - Retrieve average rating for a book
      */
 }
