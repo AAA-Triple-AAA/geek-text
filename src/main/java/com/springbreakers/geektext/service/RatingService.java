@@ -16,4 +16,9 @@ public class RatingService {
     public RatingService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    public Double getBookAvgRating(int bookId) {
+        String sql = "SELECT AVG(rating) FROM rating WHERE book_id=?";
+        return jdbcTemplate.queryForObject(sql, Double.class, bookId);
+    }
 }

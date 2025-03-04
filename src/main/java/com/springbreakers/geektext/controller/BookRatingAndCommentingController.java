@@ -13,6 +13,7 @@ import com.springbreakers.geektext.model.Comment;
 import com.springbreakers.geektext.model.Rating;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -27,9 +28,29 @@ public class BookRatingAndCommentingController
         this.commentService = commentService;
     }
 
+    @GetMapping("/books/{bookId}/rating")
+    public ResponseEntity<?> getBookRating(@PathVariable String bookId) {
+        int id;
+        try {
+            id = Integer.parseInt(bookId);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("ERROR: Invalid format");
+        }
+
+        Double rating = ratingService.getBookAvgRating(id);
+        if (rating == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Ensure rating is always only 1 decimal place
+        rating = (double)Math.round(rating * 10) / 10;
+
+        return ResponseEntity.ok(Map.of("rating", rating));
+    }
+
     @GetMapping("/books/{bookId}/comments")
     public ResponseEntity<?> getBookComments(@PathVariable String bookId) {
-        int id = 0;
+        int id;
         try {
             id = Integer.parseInt(bookId);
         } catch (NumberFormatException e) {
@@ -43,6 +64,5 @@ public class BookRatingAndCommentingController
     TODO:
     - Create rating for a book by a user on a 5-star scale with a datestamp
     - Create comment for a book by a user with a datestamp
-    - Retrieve average rating for a book
      */
 }
