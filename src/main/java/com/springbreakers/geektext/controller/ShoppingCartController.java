@@ -2,10 +2,10 @@ package com.springbreakers.geektext.controller;
 
 import com.springbreakers.geektext.model.ShoppingCart;
 import com.springbreakers.geektext.service.ShoppingCartService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,10 +25,18 @@ public class ShoppingCartController {
         return shoppingCartService.getShoppingCarts();
     }
 
+    @PostMapping("/{userId}/cart")
+    public ResponseEntity<String> addBookToShoppingCart(@PathVariable String userId, @PathParam("bookId") String bookId) {
+        return shoppingCartService.addBookToShoppingCart(userId, bookId);
+    }
+
+    @DeleteMapping("/{userId}/cart")
+    public ResponseEntity<String> removeBookFromShoppingCart(@PathVariable String userId, @PathParam("bookId") String bookId) {
+        return shoppingCartService.removeBookFromShoppingCart(userId, bookId);
+    }
+
     /*
     TODO: GET request for SUBTOTAL
-    TODO: POST request to ADD BOOK to shopping cart
     TODO: GET request to display LIST OF BOOKS in the shopping cart
-    TODO: DELETE request to REMOVE BOOK from user's shopping cart
      */
 }
