@@ -38,14 +38,14 @@ public class WishlistService {
         jdbcTemplate.update(insertSql, wishlistName, userId);
     }
 
-    public void addBookToWishlist(int userId, String wishlistName, int bookId) {
-        String checkWishlistSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND name = ?";
+    public void addBookToWishlist(int wishlistId, int bookId) {
+        /*String checkWishlistSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND name = ?";
         int wishlistCount = jdbcTemplate.queryForObject(checkWishlistSql, Integer.class, userId, wishlistName);
         if (wishlistCount == 0) {
             throw new IllegalArgumentException("Wishlist not found for this user.");
-        }
+        }*/
 
-        String insertBookSql = "INSERT INTO wishlist_books (wishlist_id, book_id) SELECT id, ? FROM wishlist WHERE user_id = ? AND name = ?";
-        jdbcTemplate.update(insertBookSql, bookId, userId, wishlistName);
+        String insertBookSql = "INSERT INTO wishlist_book VALUES (?, ?)";
+        jdbcTemplate.update(insertBookSql, wishlistId, bookId);
     }
 }

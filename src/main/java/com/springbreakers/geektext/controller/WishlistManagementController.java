@@ -32,4 +32,14 @@ public class WishlistManagementController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addBookToWishlist(@RequestParam int wishlistId, @RequestParam int bookId) {
+        try {
+            wishlistService.addBookToWishlist(wishlistId, bookId);
+            return ResponseEntity.ok("Book added successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
 }
