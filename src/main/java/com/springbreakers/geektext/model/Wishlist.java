@@ -7,6 +7,14 @@ public class Wishlist {
     private String name;
     private int userId;
 
+    public Wishlist() {
+    }
+
+    public Wishlist(String name, int userId) {
+        this.name = name;
+        this.userId = userId;
+    }
+
     public Wishlist(int id, String name, int userId) {
         this.id = id;
         this.name = name;

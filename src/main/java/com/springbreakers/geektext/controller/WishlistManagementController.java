@@ -3,9 +3,8 @@ package com.springbreakers.geektext.controller;
 import com.springbreakers.geektext.model.Wishlist;
 import com.springbreakers.geektext.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +21,25 @@ public class WishlistManagementController {
     @GetMapping
     public List<Wishlist> getWishlists() {
         return wishlistService.getWishlists();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<String> createWishlist(@RequestParam int userId, @RequestParam String wishlistName) {
+        try {
+            wishlistService.createWishlist(userId, wishlistName);
+            return ResponseEntity.ok("Wishlist created successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<String> addBookToWishlist(@RequestParam int wishlistId, @RequestParam int bookId) {
+        try {
+            wishlistService.addBookToWishlist(wishlistId, bookId);
+            return ResponseEntity.ok("Book added successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 }
