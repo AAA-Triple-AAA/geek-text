@@ -9,9 +9,6 @@ public class Author {
     private String biography;
     private int publisherId;
 
-    public Author() {
-    }
-
     public Author(int id, String first_name, String last_name, String biography, int publisherId) {
         this.id = id;
         this.first_name = first_name;
@@ -20,15 +17,12 @@ public class Author {
         this.publisherId = publisherId;
     }
 
-    public Author(String first_name, String last_name, String biography, int publisherId) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.biography = biography;
-        this.publisherId = publisherId;
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setFirst_name(String first_name) {
