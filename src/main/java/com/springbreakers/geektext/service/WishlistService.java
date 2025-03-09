@@ -1,24 +1,23 @@
 package com.springbreakers.geektext.service;
 
+import com.springbreakers.geektext.model.Wishlist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import com.springbreakers.geektext.model.Rating;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RatingService {
+public class WishlistService {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public RatingService(JdbcTemplate jdbcTemplate) {
+    public WishlistService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Double getBookAvgRating(int bookId) {
-        String sql = "SELECT AVG(rating) FROM rating WHERE book_id=?";
-        return jdbcTemplate.queryForObject(sql, Double.class, bookId);
+    public List<Wishlist> getWishlists() {
+        String sql = "SELECT * FROM wishlist";
+        return jdbcTemplate.query(sql, Wishlist.WISHLIST_MAPPER);
     }
 }
