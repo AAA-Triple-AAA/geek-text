@@ -7,22 +7,28 @@ public class Author {
     private String first_name;
     private String last_name;
     private String biography;
-    private int publisher_id;
+    private int publisherId;
 
-    public Author(int id, String first_name, String last_name, String biography, int publisher_id) {
+    public Author() {
+    }
+
+    public Author(int id, String first_name, String last_name, String biography, int publisherId) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
         this.biography = biography;
-        this.publisher_id = publisher_id;
+        this.publisherId = publisherId;
+    }
+
+    public Author(String first_name, String last_name, String biography, int publisherId) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.biography = biography;
+        this.publisherId = publisherId;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setFirst_name(String first_name) {
@@ -37,8 +43,8 @@ public class Author {
         this.biography = biography;
     }
 
-    public void setPublisher_id(int publisher_id) {
-        this.publisher_id = publisher_id;
+    public void setPublisherId(int publisherId) {
+        this.publisherId = publisherId;
     }
 
     public String getFirst_name() {
@@ -53,8 +59,8 @@ public class Author {
         return biography;
     }
 
-    public int getPublisher_id() {
-        return publisher_id;
+    public int getPublisherId() {
+        return publisherId;
     }
 
     public static final RowMapper<Author> AUTHOR_MAPPER = (rs, rowNum) -> {
@@ -64,5 +70,4 @@ public class Author {
                 rs.getString("biography"),
                 rs.getInt("publisher_id"));
     };
-
 }

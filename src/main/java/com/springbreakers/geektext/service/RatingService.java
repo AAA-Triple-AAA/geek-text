@@ -17,8 +17,8 @@ public class RatingService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-   public List<Rating> getRatings() {
-       String sql = "SELECT * FROM rating";
-       return jdbcTemplate.query(sql, Rating.RATING_MAPPER);
-   }
+    public Double getBookAvgRating(int bookId) {
+        String sql = "SELECT AVG(rating) FROM rating WHERE book_id=?";
+        return jdbcTemplate.queryForObject(sql, Double.class, bookId);
+    }
 }
