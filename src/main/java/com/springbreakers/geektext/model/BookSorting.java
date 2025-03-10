@@ -98,4 +98,3 @@ public class BookSorting {
                 rs.getInt("author_id"));
     };
 }
-
