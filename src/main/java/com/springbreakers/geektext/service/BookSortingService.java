@@ -15,13 +15,15 @@ public class BookSortingService {
         String sql = "SELECT * FROM book";
         return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER);
     }
-    public List<BookSorting> getBooksByGenre(String genre) {
-        String sql = "SELECT * FROM books WHERE genre = ?";
-        return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER, genre);
+    public List<BookSorting> getBooksByGenre(int genre_id) {
+        String sql = "SELECT * FROM book WHERE genre_id = ?";
+        return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER, genre_id);
     }
 
     public List<BookSorting> getTopSellers() {
-        String sql = "SELECT * FROM books ORDER BY copies_sold DESC LIMIT 10";
+        String sql = "SELECT * FROM book ORDER BY copies_sold DESC LIMIT 10";
         return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER);
     }
+
+
 }

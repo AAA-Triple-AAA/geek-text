@@ -25,8 +25,8 @@ public class BookSortingController {
     }
 
     @GetMapping("/genre")
-    public List<BookSorting> getBooksByGenre(@RequestParam String genre) {
-        return bookSortingService.getBooksByGenre(genre);
+    public List<BookSorting> getBooksByGenre(@RequestParam int genre_id) {
+        return bookSortingService.getBooksByGenre(genre_id);
     }
     @GetMapping("/top-sellers")
     public List<BookSorting> getTopSellers() {
