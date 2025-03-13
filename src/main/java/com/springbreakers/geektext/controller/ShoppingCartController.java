@@ -1,13 +1,16 @@
 package com.springbreakers.geektext.controller;
 
+import com.springbreakers.geektext.model.Book;
 import com.springbreakers.geektext.model.ShoppingCart;
 import com.springbreakers.geektext.service.ShoppingCartService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,8 +38,25 @@ public class ShoppingCartController {
         return shoppingCartService.removeBookFromShoppingCart(userId, bookId);
     }
 
-    /*
-    TODO: GET request for SUBTOTAL
-    TODO: GET request to display LIST OF BOOKS in the shopping cart
-     */
+    @GetMapping("/{userId}/cart")
+    public ResponseEntity<?> getShoppingCarts(@PathVariable String userId) {
+        ResponseEntity<List<Book>> response = shoppingCartService.getShoppingCartBooks(userId);
+        if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } else if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Improper user ID format");
+        }
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    @GetMapping("/{userId}/cart/subtotal")
+    public ResponseEntity<?> getShoppingCartSubtotal(@PathVariable String userId) {
+        ResponseEntity<Double> response = shoppingCartService.getShoppingCartTotal(userId);
+        if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } else if (response.getStatusCode() == HttpStatus.BAD_REQUEST) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Improper user ID format");
+        }
+        return ResponseEntity.ok(response.getBody());
+    }
 }
