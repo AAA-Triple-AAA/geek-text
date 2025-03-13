@@ -2,7 +2,6 @@
 ALTER TABLE "user" ADD COLUMN role VARCHAR(50) DEFAULT 'USER' NOT NULL;
 
 --Add a 'session_api_key' column to store API keys
---ALTER TABLE "user" ADD COLUMN session_api_key TEXT;
 ALTER TABLE "user" ADD COLUMN session_api_key VARCHAR(255) DEFAULT md5(random()::text) NOT NULL;
 
 --Generate random API keys for existing users
@@ -27,3 +26,16 @@ CREATE TRIGGER set_api_key
     BEFORE INSERT ON "user"
     FOR EACH ROW
 EXECUTE FUNCTION generate_api_key();
+
+-- Update each publisher discount value to a percentage
+UPDATE publisher
+SET discount = CASE
+                   WHEN discount > 1.0 THEN discount / 100.0
+                   WHEN discount < 0.0 THEN 0.0
+                   ELSE discount
+    END;
+
+-- Add a constraint to ensure a percentage value
+ALTER TABLE publisher
+    ADD CONSTRAINT check_discount_range
+        CHECK (discount >= 0.0 AND discount <= 1.0);
