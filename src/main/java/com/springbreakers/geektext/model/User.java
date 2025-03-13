@@ -10,8 +10,12 @@ public class User {
     private String lastName;
     private String email;
     private String address;
+    private String role;
+    private String sessionApiKey;
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, String address) {
+    public User(){};
+
+    public User(int id, String username, String password, String firstName, String lastName, String email, String address, String role, String sessionApiKey) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -19,6 +23,19 @@ public class User {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+        this.role = role;
+        this.sessionApiKey = sessionApiKey;
+    }
+
+    public User(String username, String password, String firstName, String lastName, String email, String address, String role) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.role = role;
+        this.sessionApiKey = null;
     }
 
     public int getId() {
@@ -77,9 +94,17 @@ public class User {
         this.address = address;
     }
 
+    public String getRole() { return role;}
+
+    public void setRole(String role) { this.role = role;}
+
+    public String getSessionApiKey() { return sessionApiKey;};
+
+    public void setSessionApiKey(String sessionApiKey) {this.sessionApiKey = sessionApiKey;}
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username=" + username + ", first_name=" + firstName + ", last_name=" + lastName + ", email=" + email + ", address=" + address + '}';
+        return "User{" + "id=" + id + ", username=" + username + ", first_name=" + firstName + ", last_name=" + lastName + ", email=" + email + ", address=" + address + ", role=" + role + ", sessionApiKey=" + sessionApiKey + '}';
     }
 
     public static final RowMapper<User> USER_MAPPER = (rs, rowNum) -> {
@@ -89,6 +114,8 @@ public class User {
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("email"),
-                rs.getString("address"));
+                rs.getString("address"),
+                rs.getString("role"),
+                rs.getString("session_api_key"));
     };
 }
