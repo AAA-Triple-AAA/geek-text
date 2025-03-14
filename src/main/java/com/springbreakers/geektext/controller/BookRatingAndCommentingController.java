@@ -69,7 +69,9 @@ public class BookRatingAndCommentingController {
             throw new DataIntegrityViolationException("Invalid format");
         }
 
+        // Create rating
         Optional<Rating> newRating = ratingService.addBookRating(validBookId, validUserId, validRating);
+
         // If a new rating object is not returned, the operation was not successful
         if(newRating.isEmpty()) {
             return ResponseEntity.internalServerError().body(Map.of("error", "Rating could not be created"));
@@ -113,18 +115,19 @@ public class BookRatingAndCommentingController {
             return ResponseEntity.badRequest().body(Map.of("error", "Comment cannot be longer than " + maxChars + " characters"));
         }
 
+        // Create comment
         Optional<Comment> newComment;
         Optional<Comment> previousComment = commentService.getBookComment(validBookId, validUserId);
         boolean updated = false;
         if(previousComment.isEmpty()) {
             newComment = commentService.addBookComment(validBookId, validUserId, comment);
         } else {
-            // If resource already exists, update the comment instead
+            // When a comment already exists, update the comment instead, otherwise multiple comments will be created
             newComment = commentService.updateBookComment(previousComment.get().getId(), comment);
             updated = true;
         }
 
-        // If a new rating object is not returned, the operation was not successful
+        // If a comment object is not returned, the operation was not successful
         if(newComment.isEmpty()) {
             return ResponseEntity.internalServerError().build();
         }
