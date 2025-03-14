@@ -28,7 +28,7 @@ public class RatingService {
     public Optional<Rating> addBookRating(int bookId, int userId, int rating) {
         String sql = "INSERT INTO rating (rating, user_id, book_id) VALUES (?, ?, ?)";
         int rowsChanged = jdbcTemplate.update(sql, rating, userId, bookId);
-        if (rowsChanged == 1) {
+        if(rowsChanged == 1) {
             return getBookRating(bookId, userId);
         }
         return Optional.empty();
@@ -39,8 +39,8 @@ public class RatingService {
         try {
             Rating rating = jdbcTemplate.queryForObject(sql, Rating.RATING_MAPPER, bookId, userId);
             return Optional.of(rating);
-        } catch (Exception e) {
-           return Optional.empty();
+        } catch(Exception e) {
+            return Optional.empty();
         }
     }
 }

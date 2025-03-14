@@ -25,10 +25,10 @@ public class CommentService {
     }
 
     public Optional<Comment> addBookComment(int bookId, int userId, String comment) {
-       String sql = "INSERT INTO comment (comment, user_id, book_id) VALUES (?, ?, ?)";
-       int rowsChanged = jdbcTemplate.update(sql, comment, userId, bookId);
+        String sql = "INSERT INTO comment (comment, user_id, book_id) VALUES (?, ?, ?)";
+        int rowsChanged = jdbcTemplate.update(sql, comment, userId, bookId);
 
-        if (rowsChanged == 1) {
+        if(rowsChanged == 1) {
             return getBookComment(bookId, userId);
         }
         return Optional.empty();
@@ -38,7 +38,7 @@ public class CommentService {
         String sql = "UPDATE comment SET comment=? WHERE id=?";
         int rowsChanged = jdbcTemplate.update(sql, comment, id);
 
-        if (rowsChanged == 1) {
+        if(rowsChanged == 1) {
             return getBookCommentById(id);
         }
         return Optional.empty();
@@ -49,7 +49,7 @@ public class CommentService {
         try {
             Comment comment = jdbcTemplate.queryForObject(sql, Comment.COMMENT_MAPPER, bookId, userId);
             return Optional.of(comment);
-        } catch (Exception e) {
+        } catch(Exception e) {
             return Optional.empty();
         }
     }
@@ -59,7 +59,7 @@ public class CommentService {
         try {
             Comment comment = jdbcTemplate.queryForObject(sql, Comment.COMMENT_MAPPER, id);
             return Optional.of(comment);
-        } catch (Exception e) {
+        } catch(Exception e) {
             return Optional.empty();
         }
     }

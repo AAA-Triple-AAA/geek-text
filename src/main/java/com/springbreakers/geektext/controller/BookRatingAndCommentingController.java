@@ -22,8 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class BookRatingAndCommentingController
-{
+public class BookRatingAndCommentingController {
     private final RatingService ratingService;
     private final CommentService commentService;
 
@@ -42,17 +41,17 @@ public class BookRatingAndCommentingController
         int id;
         try {
             id = Integer.parseInt(bookId);
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             return ResponseEntity.badRequest().body("ERROR: Invalid format");
         }
 
         Double rating = ratingService.getBookAvgRating(id);
-        if (rating == null) {
+        if(rating == null) {
             return ResponseEntity.notFound().build();
         }
 
         // Ensure rating is always only 1 decimal place
-        rating = (double)Math.round(rating * 10) / 10;
+        rating = (double) Math.round(rating * 10) / 10;
 
         return ResponseEntity.ok(Map.of("rating", rating));
     }
@@ -66,13 +65,13 @@ public class BookRatingAndCommentingController
             validBookId = Integer.parseInt(bookId);
             validUserId = Integer.parseInt(userId);
             validRating = Integer.parseInt(rating);
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             throw new DataIntegrityViolationException("Invalid format");
         }
 
         Optional<Rating> newRating = ratingService.addBookRating(validBookId, validUserId, validRating);
         // If a new rating object is not returned, the operation was not successful
-        if (newRating.isEmpty()) {
+        if(newRating.isEmpty()) {
             return ResponseEntity.internalServerError().body(Map.of("error", "Rating could not be created"));
         }
 
@@ -88,7 +87,7 @@ public class BookRatingAndCommentingController
         int id;
         try {
             id = Integer.parseInt(bookId);
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             return ResponseEntity.badRequest().body("ERROR: Invalid format");
         }
         List<Comment> comments = commentService.getBookComments(id);
@@ -105,19 +104,19 @@ public class BookRatingAndCommentingController
         try {
             validBookId = Integer.parseInt(bookId);
             validUserId = Integer.parseInt(userId);
-        } catch (NumberFormatException e) {
+        } catch(NumberFormatException e) {
             throw new DataIntegrityViolationException("Invalid format");
         }
-        if (comment.isEmpty()) {
-           return ResponseEntity.badRequest().body(Map.of("error", "Comment cannot be empty"));
-        } else if (comment.length() > maxChars) {
+        if(comment.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Comment cannot be empty"));
+        } else if(comment.length() > maxChars) {
             return ResponseEntity.badRequest().body(Map.of("error", "Comment cannot be longer than " + maxChars + " characters"));
         }
 
         Optional<Comment> newComment;
         Optional<Comment> previousComment = commentService.getBookComment(validBookId, validUserId);
         boolean updated = false;
-        if (previousComment.isEmpty()) {
+        if(previousComment.isEmpty()) {
             newComment = commentService.addBookComment(validBookId, validUserId, comment);
         } else {
             // If resource already exists, update the comment instead
@@ -126,7 +125,7 @@ public class BookRatingAndCommentingController
         }
 
         // If a new rating object is not returned, the operation was not successful
-        if (newComment.isEmpty()) {
+        if(newComment.isEmpty()) {
             return ResponseEntity.internalServerError().build();
         }
 
@@ -137,35 +136,35 @@ public class BookRatingAndCommentingController
      * Error handling methods
      */
 
-    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MissingServletRequestParameterException.class})
     @ResponseBody
     public Map<String, String> handleInvalidParams() {
         return Map.of("error", "Invalid parameter(s)");
     }
 
-    @ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseBody
     public Map<String, String> handleDataConflict() {
-       return Map.of("error", "Invalid format or data does not exist");
+        return Map.of("error", "Invalid format or data does not exist");
     }
 
-    @ResponseStatus(value=HttpStatus.CONFLICT)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler({SQLException.class, DuplicateKeyException.class})
     @ResponseBody
     public Map<String, String> handleAlreadyExists() {
         return Map.of("error", "Resource already exists");
     }
 
-    @ResponseStatus(value=HttpStatus.NOT_FOUND)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({EmptyResultDataAccessException.class})
     @ResponseBody
     public Map<String, String> handleResourceNotFound() {
         return Map.of("error", "Resource not found");
     }
 
-    @ResponseStatus(value=HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     @ResponseBody
     public Map<String, String> handleOtherErrors() {
