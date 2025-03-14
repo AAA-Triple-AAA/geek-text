@@ -1,6 +1,5 @@
 package com.springbreakers.geektext.service;
 
-import com.springbreakers.geektext.model.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
