@@ -1,5 +1,6 @@
 package com.springbreakers.geektext.service;
 
+import com.springbreakers.geektext.model.Book;
 import com.springbreakers.geektext.model.Wishlist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,8 +52,8 @@ public class WishlistService {
         jdbcTemplate.update(insertCartSql, userId, bookId);
     }
 
-    public List<Integer> getBooksInWishlist(int wishlistId) {
+    public List<Book> getBooksInWishlist(int wishlistId) {
         String sql = "SELECT id, isbn, title, description, year, price, copies_sold, genre_id, publisher_id, author_id FROM wishlist_book AS wb JOIN book AS b ON wb.book_id = b.id WHERE wb.id = ?";
-        return jdbcTemplate.queryForList(sql, Integer.class, wishlistId);
+        return jdbcTemplate.query(sql, Book.BOOK_MAPPER, wishlistId);
     }
 }

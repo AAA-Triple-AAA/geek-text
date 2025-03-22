@@ -1,5 +1,6 @@
 package com.springbreakers.geektext.controller;
 
+import com.springbreakers.geektext.model.Book;
 import com.springbreakers.geektext.model.Wishlist;
 import com.springbreakers.geektext.service.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +55,9 @@ public class WishlistManagementController {
     }
 
     @GetMapping("/{wishlistId}/books")
-    public ResponseEntity<List<Integer>> getBooksInWishlist(@PathVariable int wishlistId) {
+    public ResponseEntity<?> getBooksInWishlist(@PathVariable int wishlistId) {
         try {
-            List<Integer> books = wishlistService.getBooksInWishlist(wishlistId);
+            List<Book> books = wishlistService.getBooksInWishlist(wishlistId);
             return ResponseEntity.ok(books);
         } catch (Exception e) {
             return ResponseEntity.status(400).build();
