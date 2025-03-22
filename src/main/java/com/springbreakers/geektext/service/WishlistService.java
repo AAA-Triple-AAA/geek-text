@@ -44,7 +44,7 @@ public class WishlistService {
     }
 
     public void moveBookToCart(int wishlistId, int bookId, int userId) {
-        String deleteSql = "DELETE FROM wishlist_book WHERE wishlist_id = ? AND book_id = ?";
+        String deleteSql = "DELETE FROM wishlist_book WHERE wish_list_id = ? AND book_id = ?";
         int rowsAffected = jdbcTemplate.update(deleteSql, wishlistId, bookId);
 
         String insertCartSql = "INSERT INTO shopping_cart (user_id, book_id) VALUES (?, ?)";
@@ -52,7 +52,7 @@ public class WishlistService {
     }
 
     public List<Integer> getBooksInWishlist(int wishlistId) {
-        String sql = "SELECT book_id FROM wishlist_book WHERE wishlist_id = ?";
+        String sql = "SELECT book_id FROM wishlist_book WHERE wish_list_id = ?";
         return jdbcTemplate.queryForList(sql, Integer.class, wishlistId);
     }
 }
