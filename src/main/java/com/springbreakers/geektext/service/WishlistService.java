@@ -52,7 +52,7 @@ public class WishlistService {
     }
 
     public List<Integer> getBooksInWishlist(int wishlistId) {
-        String sql = "SELECT book_id FROM wishlist_book WHERE wish_list_id = ?";
+        String sql = "SELECT id, isbn, title, description, year, price, copies_sold, genre_id, publisher_id, author_id FROM wishlist_book AS wb JOIN book AS b ON wb.book_id = b.id WHERE wb.id = ?";
         return jdbcTemplate.queryForList(sql, Integer.class, wishlistId);
     }
 }
