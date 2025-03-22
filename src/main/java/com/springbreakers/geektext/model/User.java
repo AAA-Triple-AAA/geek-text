@@ -38,6 +38,17 @@ public class User {
         this.sessionApiKey = null;
     }
 
+    public User(String username, String password, String firstName, String lastName, String email, String address) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.address = address;
+        this.role = null;
+        this.sessionApiKey = null;
+    }
+
     public int getId() {
         return id;
     }
