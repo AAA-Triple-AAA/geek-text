@@ -1,13 +1,10 @@
 package com.springbreakers.geektext.controller;
 
-import com.springbreakers.geektext.model.ShoppingCart;
 import com.springbreakers.geektext.service.ShoppingCartService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,16 +17,25 @@ public class ShoppingCartController {
         this.shoppingCartService = shoppingCartService;
     }
 
-    @GetMapping("/shopping-carts")
-    public List<ShoppingCart> getShoppingCarts() {
-        return shoppingCartService.getShoppingCarts();
+    @PostMapping("/{userId}/cart")
+    public ResponseEntity<String> addCartBook(@PathVariable String userId, @PathParam("bookId") String bookId) {
+        return shoppingCartService.addBook(userId, bookId);
     }
 
-    // TODO: GET request for SUBTOTAL
+    @DeleteMapping("/{userId}/cart")
+    public ResponseEntity<String> removeCartBook(@PathVariable String userId, @PathParam("bookId") String bookId) {
+        return shoppingCartService.removeBook(userId, bookId);
+    }
 
-    // TODO: POST request to ADD BOOK to shopping cart
+    @GetMapping("/{userId}/cart")
+    public ResponseEntity<?> getCart(@PathVariable String userId) {
+        ResponseEntity<?> response = shoppingCartService.getBooks(userId);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
 
-    // TODO: GET request to display LIST OF BOOKS in the shopping cart
-
-    // TODO: DELETE request to REMOVE BOOK from user's shopping cart
+    @GetMapping("/{userId}/cart/subtotal")
+    public ResponseEntity<?> getCartSubtotal(@PathVariable String userId) {
+        ResponseEntity<?> response = shoppingCartService.getSubtotal(userId);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+    }
 }
