@@ -39,13 +39,20 @@ public class WishlistService {
     }
 
     public void addBookToWishlist(int wishlistId, int bookId) {
-        /*String checkWishlistSql = "SELECT COUNT(*) FROM wishlist WHERE user_id = ? AND name = ?";
-        int wishlistCount = jdbcTemplate.queryForObject(checkWishlistSql, Integer.class, userId, wishlistName);
-        if (wishlistCount == 0) {
-            throw new IllegalArgumentException("Wishlist not found for this user.");
-        }*/
-
         String insertBookSql = "INSERT INTO wishlist_book VALUES (?, ?)";
         jdbcTemplate.update(insertBookSql, wishlistId, bookId);
+    }
+
+    public void moveBookToCart(int wishlistId, int bookId, int userId) {
+        String deleteSql = "DELETE FROM wishlist_book WHERE wishlist_id = ? AND book_id = ?";
+        int rowsAffected = jdbcTemplate.update(deleteSql, wishlistId, bookId);
+
+        String insertCartSql = "INSERT INTO shopping_cart (user_id, book_id) VALUES (?, ?)";
+        jdbcTemplate.update(insertCartSql, userId, bookId);
+    }
+
+    public List<Integer> getBooksInWishlist(int wishlistId) {
+        String sql = "SELECT book_id FROM wishlist_book WHERE wishlist_id = ?";
+        return jdbcTemplate.queryForList(sql, Integer.class, wishlistId);
     }
 }
