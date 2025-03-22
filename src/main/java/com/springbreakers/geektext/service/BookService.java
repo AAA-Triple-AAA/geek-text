@@ -1,7 +1,9 @@
 package com.springbreakers.geektext.service;
 
 import com.springbreakers.geektext.model.Book;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,7 +32,6 @@ public class BookService {
     }
 
     //JESSICA'S METHODS
-    //Returns a single book based on the isbn.. isbns should be unique anyway. Handles case where book does not exist.
     public ResponseEntity<?> getBookByISBN(String isbn) {
         String sql = "SELECT * FROM book WHERE isbn = ?";
         List<Book> books = jdbcTemplate.query(sql, Book.BOOK_MAPPER, isbn);
@@ -38,21 +39,42 @@ public class BookService {
                 : ResponseEntity.ok(books.get(0));
     }
 
-    /*
-    public List<Book> getBooksByAuthor(int authorId) {
+    public ResponseEntity<?> getBooksByAuthor(int authorId) {
         String sql = "SELECT * FROM book WHERE author_id = ?";
-        return jdbcTemplate.query(sql, Book.BOOK_MAPPER, authorID);
+        List<Book> books = jdbcTemplate.query(sql, Book.BOOK_MAPPER, authorId);
+        return books.isEmpty() ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found with authorId: " + authorId)
+                : ResponseEntity.ok(books);
     }
-    */
 
-        /*
-    OPTIONAL SAMPLE METHOD HEADERS:
+    public ResponseEntity<?> createBook(Book book) {
+        String checkSql = "SELECT COUNT(*) FROM book WHERE isbn = ?";
+        int count = jdbcTemplate.queryForObject(checkSql, Integer.class, book.getIsbn());
 
-    public List<Book> getBooksByRating(int rating) {}
+        if (count > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Book with ISBN " + book.getIsbn() + " already exists.");
+        }
 
-    public void setPublisherDiscount(String publisher) {}
-
-    */
+        String insertSql = "INSERT INTO book (isbn, title, description, year, price, copies_sold, genre_id, publisher_id, author_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            jdbcTemplate.update(insertSql,
+                    book.getIsbn(),
+                    book.getTitle(),
+                    book.getDescription(),
+                    book.getYear(),
+                    book.getPrice(),
+                    book.getCopiesSold(),
+                    book.getGenreId(),
+                    book.getPublisherId(),
+                    book.getAuthorId());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Book created successfully.");
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Failed to create a book. Please check genreId, publisherId, or authorId.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
+        }
+    }
 
     // GENERAL METHODS
     public List<Book> getAllBooks() {
