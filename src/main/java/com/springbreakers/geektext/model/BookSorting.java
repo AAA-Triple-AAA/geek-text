@@ -12,8 +12,9 @@ public class BookSorting {
     private int genre_id;
     private int publisher_id;
     private int author_id;
+    private double rating;
 
-    public BookSorting(int id, long isbn, String title, String description, int year, double price, long copies_sold, int genre_id, int publisher_id, int author_id) {
+    public BookSorting(int id, long isbn, String title, String description, int year, double price, long copies_sold, int genre_id, int publisher_id, int author_id, double rating) {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
@@ -24,6 +25,7 @@ public class BookSorting {
         this.genre_id = genre_id;
         this.publisher_id = publisher_id;
         this.author_id = author_id;
+        this.rating = rating;
     }
     public int getId() {
         return id;
@@ -85,6 +87,12 @@ public class BookSorting {
     public void setAuthor_id(int author_id) {
         this.author_id = author_id;
     }
+    public double getRating() {
+        return rating;
+    }
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
     public static final RowMapper<BookSorting> BOOK_MAPPER = (rs, rowNum) -> {
         return new BookSorting(rs.getInt("id"),
                 rs.getLong("isbn"),
@@ -95,6 +103,7 @@ public class BookSorting {
                 rs.getLong("copies_sold"),
                 rs.getInt("genre_id"),
                 rs.getInt("publisher_id"),
-                rs.getInt("author_id"));
+                rs.getInt("author_id"),
+                rs.getDouble("rating"));
     };
 }
