@@ -24,4 +24,15 @@ public class BookSortingService {
         String sql = "SELECT * FROM book ORDER BY copies_sold DESC LIMIT 10";
         return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER);
     }
+
+   public List<BookSorting> getBooksByRating(double rating) {
+        String sql = "SELECT * FROM book WHERE rating >= ?";
+        return jdbcTemplate.query(sql, BookSorting.BOOK_MAPPER, rating);
+    }
+
+    public void discountBooksByPublisher(double discount_percent, int publisher_id) {
+        String sql = "UPDATE book SET price = price * (1 - ? / 100) WHERE publisher_id = ?";
+        jdbcTemplate.update(sql, discount_percent, publisher_id);
+    }
+
 }

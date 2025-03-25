@@ -3,10 +3,7 @@ package com.springbreakers.geektext.controller;
 import com.springbreakers.geektext.model.BookSorting;
 import com.springbreakers.geektext.service.BookSortingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
@@ -34,4 +31,15 @@ public class BookSortingController {
     public List<BookSorting> getTopSellers() {
         return bookSortingService.getTopSellers();
     }
+
+    @GetMapping("/rating")
+    public List<BookSorting> getBooksByRating(@RequestParam double rating) {
+        return bookSortingService.getBooksByRating(rating);
+    }
+
+    @PutMapping("/discount")
+    public void discountBooksByPublisher(@RequestParam double discount_percent, @RequestParam int publisher_id) {
+        bookSortingService.discountBooksByPublisher(discount_percent, publisher_id);
+    }
+
 }
