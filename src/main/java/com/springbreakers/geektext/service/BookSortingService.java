@@ -24,7 +24,7 @@ public class BookSortingService {
     }
 
     public int getGenreId(String genre) {
-        String sql = "SELECT id FROM genre WHERE genre = ?";
+        String sql = "SELECT id FROM genre WHERE name = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, genre);
     }
 
@@ -65,14 +65,12 @@ public class BookSortingService {
         return jdbcTemplate.queryForObject(sql, Integer.class, publisher);
     }
 
-    public void discountBooksByPublisher(int publisher_id, Double discount) {
+    public void discountBooksByPublisher(int publisherId, Double discount) {
         try {
-            double discountDecimal = discount / 100.0;
-
-            String sql = "UPDATE book SET price = price * (1 - ?) WHERE publisher_id = ?";
-            jdbcTemplate.update(sql, discountDecimal, publisher_id);
+            String sql = "UPDATE publisher SET discount = ? WHERE id = ?";
+            jdbcTemplate.update(sql, discount, publisherId);
         } catch(DataAccessException e) {
-            throw new RuntimeException("Database error while applying discount for publisher ID: " + publisher_id, e);
+            throw new RuntimeException("Database error while applying discount for publisher ID: " + publisherId, e);
         } catch(IllegalArgumentException e) {
             throw new RuntimeException("Invalid input: " + e.getMessage(), e);
         }

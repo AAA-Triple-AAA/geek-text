@@ -65,9 +65,10 @@ public class BookSortingController {
             @PathVariable("publisher") String publisher,
             @RequestParam String discount) {
         try {
-            Double discountDouble = discount != null ? Double.parseDouble(discount) : null;
+            int verifiedDiscount = Integer.parseInt(discount);
+            double discountDecimal = Math.round( (verifiedDiscount / 100.0) * 100) / 100.0;
             int publisherId = bookSortingService.getPublisherId(publisher);
-            bookSortingService.discountBooksByPublisher(publisherId, discountDouble);
+            bookSortingService.discountBooksByPublisher(publisherId, discountDecimal);
             return ResponseEntity.ok(Map.of("message", "Discount applied successfully"));
         } catch(NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid parameter: Publisher ID must be a number.");
