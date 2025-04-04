@@ -69,10 +69,11 @@ public class CreditCard {
 
     public static final RowMapper<CreditCard> CREDIT_CARD_MAPPER = (rs, rowNum) -> {
         return new CreditCard(rs.getInt("id"),
-                rs.getString("card_hold"),
+                rs.getString("card_holder"),
                 rs.getString("number"),
                 rs.getString("cvv"),
                 rs.getString("zip"),
                 rs.getInt("user_id"));
     };
 }
+
