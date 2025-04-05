@@ -1,5 +1,10 @@
 package com.springbreakers.geektext.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import com.springbreakers.geektext.model.BookSorting;
 import com.springbreakers.geektext.service.BookSortingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +25,18 @@ public class BookSortingController {
         this.bookSortingService = bookService;
     }
 
-    // Retrieve Books by Genre
     @GetMapping
     public List<BookSorting> getAllBooks() {
         return bookSortingService.getAllBooks();
     }
 
+    @Operation(summary = "Get books by genre")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Books matching the genre ID",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BookSorting.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid genre ID", content = @Content)
+    })
     @GetMapping("/genre")
     public ResponseEntity<?> getBooksByGenre(@RequestParam String genre_id) {
         try {
@@ -39,6 +50,13 @@ public class BookSortingController {
         }
     }
 
+    @Operation(summary = "Get top 10 bestselling books")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Top-selling books",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BookSorting.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @GetMapping("/top-sellers")
     public ResponseEntity<?> getTopSellers() {
         try {
@@ -49,6 +67,13 @@ public class BookSortingController {
         }
     }
 
+    @Operation(summary = "Get books for a particular rating and higher")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Books with rating above the threshold",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BookSorting.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid rating value", content = @Content)
+    })
     @GetMapping("/rating")
     public ResponseEntity<?> getBooksByRating(@RequestParam String rating) {
         try {
@@ -62,6 +87,13 @@ public class BookSortingController {
         }
     }
 
+    @Operation(summary = "Apply discount to books by publisher")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Discount applied successfully",
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "Invalid parameters", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @PutMapping("/publishers/{publisher_id}")
     public ResponseEntity<?> discountBooksByPublisher(
             @PathVariable("publisher_id") String publisher_id,
