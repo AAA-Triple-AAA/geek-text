@@ -4,8 +4,7 @@ import com.springbreakers.geektext.model.Author;
 import com.springbreakers.geektext.model.Book;
 import com.springbreakers.geektext.service.AuthorService;
 import com.springbreakers.geektext.service.BookService;
-import jakarta.websocket.server.PathParam;
-import org.apache.coyote.Response;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +33,14 @@ public class BookDetailsController {
     public ResponseEntity<?> getBookByISBN(@PathVariable String isbn){ return bookService.getBookByISBN(isbn); }
 
     @PostMapping("/create/authors")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> createAuthor(@RequestBody Author author){ return authorService.createAuthor(author); }
 
+    @GetMapping("/author/{authorId}")
+    public ResponseEntity<?> getBooksByAuthor(@PathVariable int authorId){ return bookService.getBooksByAuthor(authorId); }
 
-    /*
-   TODO:
-   DONE: Get a book by ISBN (isbn)... Book Id
-   -SEMI-DONE: Admin can create an author w/ first, last, bio, and publisher... Author object
-   FOLLOW-UP: Need to implement Admin through User
-   -Admin can create a book with the ISBN, book name, book desc, price, author, publisher, year published, and copies sold.. Book object
-   -Get a book associated w/ an Author, (author_id)
-   */
+    @PostMapping("create/books")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> createBook(@RequestBody Book book){ return bookService.createBook(book); }
+
 }

@@ -1,11 +1,11 @@
 package com.springbreakers.geektext.controller;
 
+import com.springbreakers.geektext.model.Book;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.springbreakers.geektext.model.BookSorting;
 import com.springbreakers.geektext.service.BookSortingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class BookSortingController {
     }
 
     @GetMapping
-    public List<BookSorting> getAllBooks() {
+    public List<Book> getAllBooks() {
         return bookSortingService.getAllBooks();
     }
 
@@ -34,14 +34,14 @@ public class BookSortingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Books matching the genre ID",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BookSorting.class))),
+                            schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "400", description = "Invalid genre ID", content = @Content)
     })
     @GetMapping("/genre")
-    public ResponseEntity<?> getBooksByGenre(@RequestParam String genre_id) {
+    public ResponseEntity<?> getBooksByGenre(@RequestParam String genreId) {
         try {
-            int genreId = Integer.parseInt(genre_id);
-            List<BookSorting> books = bookSortingService.getBooksByGenre(genreId);
+            int parsedGenreId = Integer.parseInt(genreId);
+            List<Book> books = bookSortingService.getBooksByGenreId(parsedGenreId);
             return ResponseEntity.ok(books);
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid genre ID. Please enter a valid number.");
@@ -54,13 +54,13 @@ public class BookSortingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Top-selling books",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BookSorting.class))),
+                            schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @GetMapping("/top-sellers")
     public ResponseEntity<?> getTopSellers() {
         try {
-            List<BookSorting> books = bookSortingService.getTopSellers();
+            List<Book> books = bookSortingService.getTopSellers();
             return ResponseEntity.ok(books);
         } catch (Exception e) {
             return handleException("Error retrieving top sellers", e);
@@ -71,14 +71,14 @@ public class BookSortingController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Books with rating above the threshold",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BookSorting.class))),
+                            schema = @Schema(implementation = Book.class))),
             @ApiResponse(responseCode = "400", description = "Invalid rating value", content = @Content)
     })
     @GetMapping("/rating")
     public ResponseEntity<?> getBooksByRating(@RequestParam String rating) {
         try {
             double ratingValue = Double.parseDouble(rating);
-            List<BookSorting> books = bookSortingService.getBooksByRating(ratingValue);
+            List<Book> books = bookSortingService.getBooksByRating(ratingValue);
             return ResponseEntity.ok(books);
         } catch (NumberFormatException e) {
             return ResponseEntity.badRequest().body("Invalid rating value. Please enter a valid number.");

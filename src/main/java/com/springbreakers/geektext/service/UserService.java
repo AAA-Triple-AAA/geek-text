@@ -1,6 +1,7 @@
 package com.springbreakers.geektext.service;
 
 import com.springbreakers.geektext.model.User;
+import com.springbreakers.geektext.model.CreditCard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,6 +40,37 @@ public class UserService {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    public void updateUser(User user) {
+        String sql = "UPDATE \"user\" SET password = ?, first_name = ?, last_name = ?, address = ?, role = ?, session_api_key = ? WHERE id = ?";
+
+        jdbcTemplate.update(sql,
+                user.getPassword(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getAddress(),
+                user.getRole(),
+                user.getSessionApiKey(),
+                user.getId()
+        );
+    }
+
+    public boolean addCreditCard(CreditCard creditCard) {
+        String checkSql = "SELECT COUNT(*) FROM \"credit_card\" WHERE number = ?";
+        int count = jdbcTemplate.queryForObject(checkSql, Integer.class, creditCard.getNumber());
+        if (count > 0) {return false;}
+
+        String sql = "INSERT INTO credit_card (card_holder, number, cvv, zip, user_id) VALUES (?, ?, ?, ?, ?)";
+
+        jdbcTemplate.update(sql,
+                creditCard.getCardHolder(),
+                creditCard.getNumber(),
+                creditCard.getCvv(),
+                creditCard.getZip(),
+                creditCard.getUserId()
+        );
+        return true;
     }
 
 }
