@@ -140,8 +140,35 @@ public class BookRatingAndCommentingController {
         return ResponseEntity.ok(comments);
     }
 
+    @Operation(
+            summary = "Create a comment for a book",
+            description = "Returns 201 or 200 HTTP status codes if operation was successful"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Successfully created book comment"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successfully updated book comment"
+    )
     @PostMapping("/books/{bookId}/comments")
-    public ResponseEntity<?> addBookComment(@PathVariable String bookId, @RequestParam String userId, @RequestParam String comment) {
+    public ResponseEntity<?> addBookComment(@Parameter(
+            description = "ID of the book",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId, @Parameter(
+            description = "ID of the user",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String userId, @Parameter(
+            description = "Comment text",
+            required = true,
+            example = "This was a great book",
+            schema = @Schema(type = "string")
+    ) @RequestParam String comment) {
         int validBookId, validUserId;
         int maxChars = 2000;
         comment = comment.trim();
