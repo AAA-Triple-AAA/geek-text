@@ -82,8 +82,31 @@ public class BookRatingAndCommentingController {
         return ResponseEntity.ok(Map.of("rating", rating));
     }
 
+    @Operation(
+            summary = "Add a rating for a book",
+            description = "Returns 201 HTTP status code if operation was successful"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Successfully created book rating"
+    )
     @PostMapping("/books/{bookId}/ratings")
-    public ResponseEntity<?> addBookRating(@PathVariable String bookId, @RequestParam String userId, @RequestParam String rating) {
+    public ResponseEntity<?> addBookRating(@Parameter(
+            description = "ID of the book",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId, @Parameter(
+            description = "ID of the user",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String userId, @Parameter(
+            description = "User's rating for the book",
+            required = true,
+            example = "3",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String rating) {
         int validBookId, validUserId, validRating;
 
         // User input validation
