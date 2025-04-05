@@ -21,3 +21,7 @@ DB_URL=[insert JDBC connection string here]
 **Note:** You will need to retrieve the **JDBC** connection string from your database host (i.e. Supabase, Neon, etc.).
 
 3. Open the project in your favorite IDE and let Maven sync the dependencies.
+
+## Documentation
+The Swagger API documentation view is available at `[host domain]/swagger-ui/index.html` and can be accessed when running the project.
+When running locally, the API documentation is available at [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
