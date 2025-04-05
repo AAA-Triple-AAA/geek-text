@@ -2,6 +2,12 @@ package com.springbreakers.geektext.controller;
 
 import com.springbreakers.geektext.service.CommentService;
 import com.springbreakers.geektext.service.RatingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -36,18 +42,38 @@ public class BookRatingAndCommentingController {
      * Book rating handler methods
      */
 
+    @Operation(
+            summary = "Get book's average rating",
+            description = "Returns the average rating of a book"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"rating\": 4.5}"
+                    )
+            )
+    )
     @GetMapping("/books/{bookId}/rating")
-    public ResponseEntity<?> getBookRating(@PathVariable String bookId) {
+    public ResponseEntity<?> getBookRating(@Parameter(
+            description = "ID of the book for which to get the average rating",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId) {
         int id;
         try {
             id = Integer.parseInt(bookId);
         } catch(NumberFormatException e) {
-            return ResponseEntity.badRequest().body("ERROR: Invalid format");
+            throw new DataIntegrityViolationException("Invalid format");
         }
 
         Double rating = ratingService.getBookAvgRating(id);
         if(rating == null) {
-            return ResponseEntity.notFound().build();
+            throw new EmptyResultDataAccessException(1);
         }
 
         // Ensure rating is always only 1 decimal place
@@ -56,8 +82,31 @@ public class BookRatingAndCommentingController {
         return ResponseEntity.ok(Map.of("rating", rating));
     }
 
+    @Operation(
+            summary = "Add a rating for a book",
+            description = "Returns 201 HTTP status code if operation was successful"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Successfully created book rating"
+    )
     @PostMapping("/books/{bookId}/ratings")
-    public ResponseEntity<?> addBookRating(@PathVariable String bookId, @RequestParam String userId, @RequestParam String rating) {
+    public ResponseEntity<?> addBookRating(@Parameter(
+            description = "ID of the book",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId, @Parameter(
+            description = "ID of the user",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String userId, @Parameter(
+            description = "User's rating for the book",
+            required = true,
+            example = "3",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String rating) {
         int validBookId, validUserId, validRating;
 
         // User input validation
@@ -84,20 +133,65 @@ public class BookRatingAndCommentingController {
      * Book comment hanLer methods
      */
 
+    @Operation(
+            summary = "Get book's comments",
+            description = "Returns a list of comments made for a book"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Comment.class))
+            )
+    )
     @GetMapping("/books/{bookId}/comments")
-    public ResponseEntity<?> getBookComments(@PathVariable String bookId) {
+    public ResponseEntity<?> getBookComments(@Parameter(
+            description = "ID of the book for which to get the list of comments",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId) {
         int id;
         try {
             id = Integer.parseInt(bookId);
         } catch(NumberFormatException e) {
-            return ResponseEntity.badRequest().body("ERROR: Invalid format");
+            throw new DataIntegrityViolationException("Invalid format");
         }
+
         List<Comment> comments = commentService.getBookComments(id);
         return ResponseEntity.ok(comments);
     }
 
+    @Operation(
+            summary = "Create a comment for a book",
+            description = "Returns 201 or 200 HTTP status codes if operation was successful"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Successfully created book comment"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successfully updated book comment"
+    )
     @PostMapping("/books/{bookId}/comments")
-    public ResponseEntity<?> addBookComment(@PathVariable String bookId, @RequestParam String userId, @RequestParam String comment) {
+    public ResponseEntity<?> addBookComment(@Parameter(
+            description = "ID of the book",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId, @Parameter(
+            description = "ID of the user",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @RequestParam String userId, @Parameter(
+            description = "Comment text",
+            required = true,
+            example = "This was a great book",
+            schema = @Schema(type = "string")
+    ) @RequestParam String comment) {
         int validBookId, validUserId;
         int maxChars = 2000;
         comment = comment.trim();
@@ -139,6 +233,16 @@ public class BookRatingAndCommentingController {
      * Error handling methods
      */
 
+    @ApiResponse(
+            responseCode = "400",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"error\": \"error message\"}"
+                    )
+            )
+    )
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MissingServletRequestParameterException.class})
     @ResponseBody
@@ -146,6 +250,16 @@ public class BookRatingAndCommentingController {
         return Map.of("error", "Invalid parameter(s)");
     }
 
+    @ApiResponse(
+            responseCode = "400",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"error\": \"error message\"}"
+                    )
+            )
+    )
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({DataIntegrityViolationException.class})
     @ResponseBody
@@ -153,6 +267,16 @@ public class BookRatingAndCommentingController {
         return Map.of("error", "Invalid format or data does not exist");
     }
 
+    @ApiResponse(
+            responseCode = "409",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"error\": \"error message\"}"
+                    )
+            )
+    )
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler({SQLException.class, DuplicateKeyException.class})
     @ResponseBody
@@ -160,6 +284,16 @@ public class BookRatingAndCommentingController {
         return Map.of("error", "Resource already exists");
     }
 
+    @ApiResponse(
+            responseCode = "404",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"error\": \"error message\"}"
+                    )
+            )
+    )
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler({EmptyResultDataAccessException.class})
     @ResponseBody
@@ -167,6 +301,16 @@ public class BookRatingAndCommentingController {
         return Map.of("error", "Resource not found");
     }
 
+    @ApiResponse(
+            responseCode = "500",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{\"error\": \"error message\"}"
+                    )
+            )
+    )
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({Exception.class})
     @ResponseBody
