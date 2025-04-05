@@ -3,6 +3,7 @@ package com.springbreakers.geektext.controller;
 import com.springbreakers.geektext.model.Book;
 import com.springbreakers.geektext.service.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,7 +53,11 @@ public class ShoppingCartController {
                     })
     })
     @PostMapping("/{userId}/cart")
-    public ResponseEntity<String> addCartBook(@PathVariable String userId, @PathParam("bookId") String bookId) {
+    public ResponseEntity<String> addCartBook(
+            @Parameter(description = "ID of the user", required = true, example = "1", schema = @Schema(type = "integer"))
+            @PathVariable String userId,
+            @Parameter(description = "ID of the book", required = true, example = "1", schema = @Schema(type = "integer"))
+            @PathParam("bookId") String bookId) {
         return shoppingCartService.addBook(userId, bookId);
     }
 
@@ -78,7 +83,11 @@ public class ShoppingCartController {
                     })
     })
     @DeleteMapping("/{userId}/cart")
-    public ResponseEntity<String> removeCartBook(@PathVariable String userId, @PathParam("bookId") String bookId) {
+    public ResponseEntity<String> removeCartBook(
+            @Parameter(description = "ID of the user", required = true, example = "2", schema = @Schema(type = "integer"))
+            @PathVariable String userId,
+            @Parameter(description = "ID of the book", required = true, example = "2", schema = @Schema(type = "integer"))
+            @PathParam("bookId") String bookId) {
         return shoppingCartService.removeBook(userId, bookId);
     }
 
@@ -105,7 +114,9 @@ public class ShoppingCartController {
                     }),
     })
     @GetMapping("/{userId}/cart")
-    public ResponseEntity<?> getCart(@PathVariable String userId) {
+    public ResponseEntity<?> getCart(
+            @Parameter(description = "ID of the user", required = true, example = "3", schema = @Schema(type = "integer"))
+            @PathVariable String userId) {
         ResponseEntity<?> response = shoppingCartService.getBooks(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
@@ -133,7 +144,9 @@ public class ShoppingCartController {
                     }),
     })
     @GetMapping("/{userId}/cart/subtotal")
-    public ResponseEntity<?> getCartSubtotal(@PathVariable String userId) {
+    public ResponseEntity<?> getCartSubtotal(
+            @Parameter(description = "ID of the user", required = true, example = "4", schema = @Schema(type = "integer"))
+            @PathVariable String userId) {
         ResponseEntity<?> response = shoppingCartService.getSubtotal(userId);
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
