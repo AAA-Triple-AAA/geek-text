@@ -43,7 +43,7 @@ public class BookRatingAndCommentingController {
 
     @Operation(
             summary = "Get book rating",
-            description = "Returns the rating of a book"
+            description = "Returns the average rating of a book"
     )
     @ApiResponse(
             responseCode = "200",
@@ -58,7 +58,7 @@ public class BookRatingAndCommentingController {
     )
     @GetMapping("/books/{bookId}/rating")
     public ResponseEntity<?> getBookRating(@Parameter(
-            description = "ID of the book to retrieve",
+            description = "ID of the book for which to get the average rating",
             required = true,
             example = "5",
             schema = @Schema(type = "integer")
