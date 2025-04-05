@@ -4,6 +4,7 @@ import com.springbreakers.geektext.service.CommentService;
 import com.springbreakers.geektext.service.RatingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,7 +43,7 @@ public class BookRatingAndCommentingController {
      */
 
     @Operation(
-            summary = "Get book rating",
+            summary = "Get book's average rating",
             description = "Returns the average rating of a book"
     )
     @ApiResponse(
@@ -109,8 +110,25 @@ public class BookRatingAndCommentingController {
      * Book comment hanLer methods
      */
 
+    @Operation(
+            summary = "Get book's comments",
+            description = "Returns a list of comments made for a book"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = Comment.class))
+            )
+    )
     @GetMapping("/books/{bookId}/comments")
-    public ResponseEntity<?> getBookComments(@PathVariable String bookId) {
+    public ResponseEntity<?> getBookComments(@Parameter(
+            description = "ID of the book for which to get the list of comments",
+            required = true,
+            example = "5",
+            schema = @Schema(type = "integer")
+    ) @PathVariable String bookId) {
         int id;
         try {
             id = Integer.parseInt(bookId);
