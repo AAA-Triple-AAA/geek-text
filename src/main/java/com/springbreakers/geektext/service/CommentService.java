@@ -1,5 +1,6 @@
 package com.springbreakers.geektext.service;
 
+import com.springbreakers.geektext.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -19,6 +20,12 @@ public class CommentService {
     }
 
     public List<Comment> getBookComments(int bookId) {
+        // Attempt to retrieve book first to determine if it exists
+        // If the book does not exist, SQL exception will be thrown to result in a 404
+        String bookSql = "SELECT * FROM book WHERE id = ?";
+        jdbcTemplate.queryForObject(bookSql, Book.BOOK_MAPPER, bookId);
+
+        // Returns list of comments, which may be empty if there are no comments
         String sql = "SELECT * FROM comment WHERE book_id=?";
         return jdbcTemplate.query(sql, Comment.COMMENT_MAPPER, bookId);
     }
