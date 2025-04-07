@@ -21,11 +21,23 @@ public class AuthorService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Service method that retrieves all authors from the database.
+     *
+     * @return List of all authors.
+     */
     public List<Author> getAuthors() {
         String sql = "SELECT * FROM author";
         return jdbcTemplate.query(sql, Author.AUTHOR_MAPPER);
     }
 
+    /**
+     * Service method that creates a new author record in the database.
+     * Checks for duplicates based on first name, last name, and publisher ID.
+     *
+     * @param author Author object containing the necessary information to insert.
+     * @return ResponseEntity with success, conflict, or error message depending on the outcome.
+     */
     public ResponseEntity<String> createAuthor(Author author) {
         String sql = "INSERT INTO author (first_name, last_name, biography, publisher_id) VALUES (?, ?, ?, ?)";
         String checkSql = "SELECT COUNT(*) FROM author WHERE first_name = ? AND last_name = ? AND publisher_id = ?";
@@ -43,12 +55,10 @@ public class AuthorService {
         }catch (DataIntegrityViolationException e){ //Integrity/Foreign key violations
             LOGGER.warning("Failed to add an author: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(("Duplicate entry not allowed."));
-        }catch (Exception e){ //General
+        }catch (Exception e){
             LOGGER.severe("Unexpected error: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
-
-    //Delete an author?
 
 }
