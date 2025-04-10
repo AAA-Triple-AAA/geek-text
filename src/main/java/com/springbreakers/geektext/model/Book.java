@@ -13,10 +13,12 @@ public class Book {
     private int genreId;
     private int publisherId;
     private int authorId;
+    private double rating;
 
-    public Book() {}
+    public Book() {
+    }
 
-    public Book(int id, String isbn, String title, String description, int year, double price, int copiesSold, int genreId, int publisherId, int authorId) {
+    public Book(int id, String isbn, String title, String description, int year, double price, int copiesSold, int genreId, int publisherId, int authorId, double rating) {
         this.id = id;
         this.isbn = isbn;
         this.title = title;
@@ -27,6 +29,7 @@ public class Book {
         this.genreId = genreId;
         this.publisherId = publisherId;
         this.authorId = authorId;
+        this.rating = rating;
     }
 
     public Book(String isbn, String title, String description, int year, double price, int copiesSold, int genreId, int publisherId, int authorId) {
@@ -121,6 +124,15 @@ public class Book {
         this.authorId = authorId;
     }
 
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+
     public static final RowMapper<Book> BOOK_MAPPER = (rs, rowNum) -> {
         return new Book(rs.getInt("id"),
                 rs.getString("isbn"),
@@ -131,6 +143,7 @@ public class Book {
                 rs.getInt("copies_sold"),
                 rs.getInt("genre_id"),
                 rs.getInt("publisher_id"),
-                rs.getInt("author_id"));
+                rs.getInt("author_id"),
+                rs.getDouble("rating"));
     };
 }
