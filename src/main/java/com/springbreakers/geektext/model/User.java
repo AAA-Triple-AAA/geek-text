@@ -3,7 +3,7 @@ package com.springbreakers.geektext.model;
 import org.springframework.jdbc.core.RowMapper;
 
 public class User {
-    private int id;
+    private Integer id;
     private String username;
     private String password;
     private String firstName;
@@ -49,7 +49,7 @@ public class User {
         this.sessionApiKey = null;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
