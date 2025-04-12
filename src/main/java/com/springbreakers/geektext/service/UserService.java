@@ -25,10 +25,15 @@ public class UserService {
         return jdbcTemplate.query(sql, User.USER_MAPPER);
     }
 
-    public void createUser(User user) {
-        String sql = "INSERT INTO \"user\" (username, password, first_name, last_name, email, address) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean createUser(User user) {
+        Optional<User> existingUser = getUser(user.getUsername());
+        if (existingUser.isPresent()) {
+            return false;
+        }
 
+        String sql = "INSERT INTO \"user\" (username, password, first_name, last_name, email, address) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getAddress());
+        return true;
     }
 
     public Optional<User> getUser(String username) {
@@ -42,7 +47,17 @@ public class UserService {
         }
     }
 
-    public void updateUser(User user) {
+    public boolean updateUser(User user) {
+        if (user.getId() == null) {
+            return false;
+        }
+
+        String checkSql = "SELECT COUNT(*) FROM \"user\" WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, user.getId());
+        if (count == null || count == 0) {
+            return false;
+        }
+
         String sql = "UPDATE \"user\" SET password = ?, first_name = ?, last_name = ?, address = ?, role = ?, session_api_key = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
@@ -54,12 +69,20 @@ public class UserService {
                 user.getSessionApiKey(),
                 user.getId()
         );
+        return true;
     }
 
     public boolean addCreditCard(CreditCard creditCard) {
         String checkSql = "SELECT COUNT(*) FROM \"credit_card\" WHERE number = ?";
         int count = jdbcTemplate.queryForObject(checkSql, Integer.class, creditCard.getNumber());
-        if (count > 0) {return false;}
+        if (count > 0) {
+            return false;
+        }
+        String userCheckSql = "SELECT COUNT(*) FROM \"user\" WHERE id = ?";
+        Integer userCount = jdbcTemplate.queryForObject(userCheckSql, Integer.class, creditCard.getUserId());
+        if (userCount == null || userCount == 0) {
+            return false;
+        }
 
         String sql = "INSERT INTO credit_card (card_holder, number, cvv, zip, user_id) VALUES (?, ?, ?, ?, ?)";
 
